@@ -3,7 +3,7 @@ import pandas as pd
 import io
 import os
 
-st.title('Visualizzatore e Modificatore di File Excel')
+st.title('Duplicatore Dope righe Excel')
 
 # Controlla se un nuovo file è stato caricato
 if 'uploaded_file' not in st.session_state:
@@ -26,10 +26,10 @@ if uploaded_file is not None:
     sheet_names = excel_data.sheet_names
     
     # Seleziona un foglio
-    selected_sheet = st.selectbox("Seleziona un foglio da visualizzare", sheet_names)
+    selected_sheet = st.selectbox("Seleziona un foglio da modificare", sheet_names)
 
     # Inserisci il numero della riga di intestazione
-    header_row = st.number_input("Inserisci il numero della riga di intestazione (a partire da 0)", min_value=0, value=st.session_state.header_row, key="header_row")
+    header_row = st.number_input("Inserisci il numero della riga di intestazione", min_value=0, value=st.session_state.header_row, key="header_row")
     
     # Mostra l'anteprima del foglio selezionato
     if selected_sheet:
