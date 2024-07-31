@@ -4,10 +4,24 @@ import io
 
 st.title('Excel File Previewer and Modifier')
 
+# Check if a new file is uploaded
+if 'uploaded_file' not in st.session_state:
+    st.session_state.uploaded_file = None
+    st.session_state.header_row = 0
+
 # Upload the Excel file
 uploaded_file = st.file_uploader("Choose an Excel file", type="xlsx")
 
 if uploaded_file is not None:
+    # Check if the uploaded file is new
+    if uploaded_file != st.session_state.uploaded_file:
+        st.session_state.uploaded_file = uploaded_file
+        st.session_state.header_row = 0
+    
+    # Input header row
+    header_row = st.number_input("Enter the header row number (starting from 0)", min_value=0, value=st.session_state.header_row, key="header_row_input")
+    st.session_state.header_row = header_row
+    
     # Load the Excel file
     excel_data = pd.ExcelFile(uploaded_file)
     
@@ -17,12 +31,9 @@ if uploaded_file is not None:
     # Select a sheet
     selected_sheet = st.selectbox("Select a sheet to preview", sheet_names)
 
-    # Input header row
-    header_row = st.number_input("Enter the header row number (starting from 0)", min_value=0, value=0)
-    
     # Display preview of selected sheet
     if selected_sheet:
-        df = pd.read_excel(uploaded_file, sheet_name=selected_sheet, header=header_row, dtype=str)
+        df = pd.read_excel(uploaded_file, sheet_name=selected_sheet, header=st.session_state.header_row, dtype=str)
         st.write("Preview of the selected sheet:")
         st.dataframe(df)
         
