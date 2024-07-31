@@ -19,7 +19,7 @@ if uploaded_file is not None:
     
     # Display preview of selected sheet
     if selected_sheet:
-        df = pd.read_excel(uploaded_file, sheet_name=selected_sheet)
+        df = pd.read_excel(uploaded_file, sheet_name=selected_sheet, dtype=str)
         st.write("Preview of the selected sheet:")
         st.dataframe(df)
         
@@ -46,7 +46,7 @@ if uploaded_file is not None:
                     if sheet == selected_sheet:
                         modified_df.to_excel(writer, index=False, sheet_name=sheet)
                     else:
-                        pd.read_excel(uploaded_file, sheet_name=sheet).to_excel(writer, index=False, sheet_name=sheet)
+                        pd.read_excel(uploaded_file, sheet_name=sheet, dtype=str).to_excel(writer, index=False, sheet_name=sheet)
             output.seek(0)
             
             st.success("File exported successfully. You can download it below.")
