@@ -73,7 +73,7 @@ if uploaded_file is not None:
             original_filename = uploaded_file.name
             new_filename = os.path.splitext(original_filename)[0] + "_modificato.xlsx"
             
-            st.success(f"File esportato con successo. Puoi scaricarlo qui sotto come {new_filename}.")
+            st.success(f"File modificato con successo. Puoi scaricarlo qui sotto come {new_filename}.")
             st.download_button(label="Scarica il file Excel modificato", data=output, file_name=new_filename, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             
             st.write("Anteprima del foglio modificato:")
