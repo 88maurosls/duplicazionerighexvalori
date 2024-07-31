@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import io
 
 st.title('Excel File Previewer and Modifier')
 
@@ -38,12 +39,13 @@ if uploaded_file is not None:
             
             modified_df = pd.DataFrame(new_rows)
             
-            # Save to a new Excel file
-            output_file = "modified_file.xlsx"
-            modified_df.to_excel(output_file, index=False)
+            # Save to a new Excel file in memory
+            output = io.BytesIO()
+            with pd.ExcelWriter(output, engine='openpyxl') as writer:
+                modified_df.to_excel(writer, index=False, sheet_name='Modified')
+            output.seek(0)
             
-            st.success(f"File exported successfully: {output_file}")
+            st.success("File exported successfully. You can download it below.")
+            st.download_button(label="Download modified Excel file", data=output, file_name="modified_file.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            
             st.dataframe(modified_df)
-
-### File `requirements.txt`:
-
