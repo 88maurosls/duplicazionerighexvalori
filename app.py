@@ -3,7 +3,7 @@ import pandas as pd
 import io
 import os
 
-st.title('Visualizzatore e Modificatore di File Excel')
+st.title('Duplicatore Righe file Excel')
 
 # Controlla se un nuovo file è stato caricato
 if 'uploaded_file' not in st.session_state:
