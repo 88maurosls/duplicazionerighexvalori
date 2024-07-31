@@ -3,7 +3,7 @@ import pandas as pd
 import io
 import os
 
-st.title('Duplicatore di righe Excel')
+st.title('Visualizzatore e Modificatore di File Excel')
 
 # Controlla se un nuovo file è stato caricato
 if 'uploaded_file' not in st.session_state:
@@ -19,14 +19,17 @@ if uploaded_file is not None:
         st.session_state.uploaded_file = uploaded_file
         st.session_state.header_row = 0
     
-    # Mostra i nomi dei fogli
+    # Carica il file Excel
     excel_data = pd.ExcelFile(uploaded_file)
+    
+    # Mostra i nomi dei fogli
     sheet_names = excel_data.sheet_names
-    selected_sheet = st.selectbox("Seleziona un foglio da modificare", sheet_names)
+    
+    # Seleziona un foglio
+    selected_sheet = st.selectbox("Seleziona un foglio da visualizzare", sheet_names)
 
     # Inserisci il numero della riga di intestazione
-    header_row = st.number_input("Inserisci il numero della riga di intestazione", min_value=0, value=st.session_state.header_row, key="header_row")
-    st.session_state.header_row = header_row  # Aggiorna lo stato della sessione con il valore corrente
+    header_row = st.number_input("Inserisci il numero della riga di intestazione (a partire da 0)", min_value=0, value=st.session_state.header_row, key="header_row")
     
     # Mostra l'anteprima del foglio selezionato
     if selected_sheet:
@@ -70,7 +73,7 @@ if uploaded_file is not None:
             original_filename = uploaded_file.name
             new_filename = os.path.splitext(original_filename)[0] + "_modificato.xlsx"
             
-            st.success(f"File modificato con successo. Puoi scaricarlo qui sotto come {new_filename}.")
+            st.success(f"File esportato con successo. Puoi scaricarlo qui sotto come {new_filename}.")
             st.download_button(label="Scarica il file Excel modificato", data=output, file_name=new_filename, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             
             st.write("Anteprima del foglio modificato:")
