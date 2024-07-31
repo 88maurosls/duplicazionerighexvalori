@@ -3,47 +3,47 @@ import pandas as pd
 import io
 import os
 
-st.title('Visualizzatore e Modificatore di File Excel')
+st.title('Excel File Previewer and Modifier')
 
-# Controlla se un nuovo file è stato caricato
+# Check if a new file is uploaded
 if 'uploaded_file' not in st.session_state:
     st.session_state.uploaded_file = None
     st.session_state.header_row = 0
 
-# Carica il file Excel
-uploaded_file = st.file_uploader("Scegli un file Excel", type="xlsx")
+# Upload the Excel file
+uploaded_file = st.file_uploader("Choose an Excel file", type="xlsx")
 
 if uploaded_file is not None:
-    # Controlla se il file caricato è nuovo
+    # Check if the uploaded file is new
     if uploaded_file != st.session_state.uploaded_file:
         st.session_state.uploaded_file = uploaded_file
         st.session_state.header_row = 0
     
-    # Carica il file Excel
+    # Load the Excel file
     excel_data = pd.ExcelFile(uploaded_file)
     
-    # Mostra i nomi dei fogli
+    # Display sheet names
     sheet_names = excel_data.sheet_names
     
-    # Seleziona un foglio
-    selected_sheet = st.selectbox("Seleziona un foglio da visualizzare", sheet_names)
+    # Select a sheet
+    selected_sheet = st.selectbox("Select a sheet to preview", sheet_names)
 
-    # Inserisci il numero della riga di intestazione
-    header_row = st.number_input("Inserisci il numero della riga di intestazione (a partire da 0)", min_value=0, value=st.session_state.header_row, key="header_row")
+    # Input header row
+    header_row = st.number_input("Enter the header row number (starting from 0)", min_value=0, value=st.session_state.header_row, key="header_row")
     
-    # Mostra l'anteprima del foglio selezionato
+    # Display preview of selected sheet
     if selected_sheet:
         df = pd.read_excel(uploaded_file, sheet_name=selected_sheet, header=header_row, dtype=str)
-        st.write("Anteprima del foglio selezionato:")
+        st.write("Preview of the selected sheet:")
         st.dataframe(df)
         
-        # Seleziona le colonne per l'operazione
+        # Select columns for the operation
         columns = df.columns.tolist()
-        col1 = st.selectbox("Seleziona la colonna con i valori da duplicare", columns, key="col1")
-        col2 = st.selectbox("Seleziona la colonna con il numero di duplicazioni", columns, key="col2")
+        col1 = st.selectbox("Select the column with values to duplicate", columns, key="col1")
+        col2 = st.selectbox("Select the column with number of duplications", columns, key="col2")
         
-        if st.button("Modifica ed Esporta"):
-            # Crea il dataframe modificato
+        if st.button("Modify and Export"):
+            # Create the modified dataframe
             new_rows = []
             for index, row in df.iterrows():
                 value = row[col1]
@@ -54,12 +54,12 @@ if uploaded_file is not None:
                     repeat_times = int(repeat_times)
                     for _ in range(repeat_times):
                         new_row = row.copy()
-                        new_row[col2] = '1'  # Imposta il valore della colonna di duplicazione a '1'
+                        new_row[col2] = '1'  # Set the duplication column value to '1'
                         new_rows.append(new_row)
             
             modified_df = pd.DataFrame(new_rows)
             
-            # Salva il nuovo file Excel in memoria
+            # Save to a new Excel file in memory
             output = io.BytesIO()
             with pd.ExcelWriter(output, engine='openpyxl') as writer:
                 for sheet in sheet_names:
@@ -69,12 +69,12 @@ if uploaded_file is not None:
                         pd.read_excel(uploaded_file, sheet_name=sheet, dtype=str).to_excel(writer, index=False, sheet_name=sheet)
             output.seek(0)
             
-            # Ottieni il nome del file originale e aggiungi "_modificato"
+            # Get the original file name and add "_modificato"
             original_filename = uploaded_file.name
             new_filename = os.path.splitext(original_filename)[0] + "_modificato.xlsx"
             
-            st.success(f"File esportato con successo. Puoi scaricarlo qui sotto come {new_filename}.")
-            st.download_button(label="Scarica il file Excel modificato", data=output, file_name=new_filename, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            st.success(f"File exported successfully. You can download it below as {new_filename}.")
+            st.download_button(label="Download modified Excel file", data=output, file_name=new_filename, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             
-            st.write("Anteprima del foglio modificato:")
+            st.write("Preview of the modified sheet:")
             st.dataframe(modified_df)
