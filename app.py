@@ -1,24 +1,13 @@
 import streamlit as st
 import pandas as pd
 import io
-import os
 
 st.title('Excel File Previewer and Modifier')
-
-# Check if a new file is uploaded
-if 'uploaded_file' not in st.session_state:
-    st.session_state.uploaded_file = None
-    st.session_state.header_row = 0
 
 # Upload the Excel file
 uploaded_file = st.file_uploader("Choose an Excel file", type="xlsx")
 
 if uploaded_file is not None:
-    # Check if the uploaded file is new
-    if uploaded_file != st.session_state.uploaded_file:
-        st.session_state.uploaded_file = uploaded_file
-        st.session_state.header_row = 0
-    
     # Load the Excel file
     excel_data = pd.ExcelFile(uploaded_file)
     
@@ -29,7 +18,7 @@ if uploaded_file is not None:
     selected_sheet = st.selectbox("Select a sheet to preview", sheet_names)
 
     # Input header row
-    header_row = st.number_input("Enter the header row number (starting from 0)", min_value=0, value=st.session_state.header_row, key="header_row")
+    header_row = st.number_input("Enter the header row number (starting from 0)", min_value=0, value=0)
     
     # Display preview of selected sheet
     if selected_sheet:
@@ -69,12 +58,8 @@ if uploaded_file is not None:
                         pd.read_excel(uploaded_file, sheet_name=sheet, dtype=str).to_excel(writer, index=False, sheet_name=sheet)
             output.seek(0)
             
-            # Get the original file name and add "_modificato"
-            original_filename = uploaded_file.name
-            new_filename = os.path.splitext(original_filename)[0] + "_modificato.xlsx"
-            
-            st.success(f"File exported successfully. You can download it below as {new_filename}.")
-            st.download_button(label="Download modified Excel file", data=output, file_name=new_filename, mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            st.success("File exported successfully. You can download it below.")
+            st.download_button(label="Download modified Excel file", data=output, file_name="modified_file.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             
             st.write("Preview of the modified sheet:")
             st.dataframe(modified_df)
