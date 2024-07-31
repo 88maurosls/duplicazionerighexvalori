@@ -16,10 +16,13 @@ if uploaded_file is not None:
     
     # Select a sheet
     selected_sheet = st.selectbox("Select a sheet to preview", sheet_names)
+
+    # Input header row
+    header_row = st.number_input("Enter the header row number (starting from 0)", min_value=0, value=0)
     
     # Display preview of selected sheet
     if selected_sheet:
-        df = pd.read_excel(uploaded_file, sheet_name=selected_sheet, dtype=str)
+        df = pd.read_excel(uploaded_file, sheet_name=selected_sheet, header=header_row, dtype=str)
         st.write("Preview of the selected sheet:")
         st.dataframe(df)
         
