@@ -34,7 +34,7 @@ if uploaded_file is not None:
             for index, row in df.iterrows():
                 value = row[col1]
                 repeat_times = row[col2]
-                if not repeat_times or repeat_times == '0':
+                if pd.isna(repeat_times) or repeat_times.strip() == '' or not repeat_times.isdigit() or int(repeat_times) == 0:
                     continue
                 repeat_times = int(repeat_times)
                 for _ in range(repeat_times):
