@@ -35,7 +35,9 @@ if uploaded_file is not None:
                 value = row[col1]
                 repeat_times = int(row[col2])
                 for _ in range(repeat_times):
-                    new_rows.append(row)
+                    new_row = row.copy()
+                    new_row[col2] = '1'  # Set the duplication column value to '1'
+                    new_rows.append(new_row)
             
             modified_df = pd.DataFrame(new_rows)
             
