@@ -32,13 +32,11 @@ if uploaded_file is not None:
             # Create the modified dataframe
             new_rows = []
             for index, row in df.iterrows():
-                try:
-                    repeat_times = int(row[col2])
-                except ValueError:
-                    st.error(f"Invalid value in column '{col2}' at row {index + 1}. Please ensure all values are integers.")
-                    continue
-
                 value = row[col1]
+                repeat_times = row[col2]
+                if not repeat_times or repeat_times == '0':
+                    continue
+                repeat_times = int(repeat_times)
                 for _ in range(repeat_times):
                     new_row = row.copy()
                     new_row[col2] = '1'  # Set the duplication column value to '1'
