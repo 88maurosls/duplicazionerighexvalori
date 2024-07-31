@@ -12,8 +12,6 @@ if uploaded_file is not None:
     
     # Display sheet names
     sheet_names = excel_data.sheet_names
-    st.write("Available Sheets:")
-    st.write(sheet_names)
     
     # Select a sheet
     selected_sheet = st.selectbox("Select a sheet to preview", sheet_names)
