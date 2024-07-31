@@ -35,12 +35,13 @@ if uploaded_file is not None:
                 value = row[col1]
                 repeat_times = row[col2]
                 if pd.isna(repeat_times) or repeat_times.strip() == '' or not repeat_times.isdigit() or int(repeat_times) == 0:
-                    continue
-                repeat_times = int(repeat_times)
-                for _ in range(repeat_times):
-                    new_row = row.copy()
-                    new_row[col2] = '1'  # Set the duplication column value to '1'
-                    new_rows.append(new_row)
+                    new_rows.append(row)
+                else:
+                    repeat_times = int(repeat_times)
+                    for _ in range(repeat_times):
+                        new_row = row.copy()
+                        new_row[col2] = '1'  # Set the duplication column value to '1'
+                        new_rows.append(new_row)
             
             modified_df = pd.DataFrame(new_rows)
             
