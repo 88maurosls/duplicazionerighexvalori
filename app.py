@@ -42,10 +42,15 @@ if uploaded_file is not None:
             # Save to a new Excel file in memory
             output = io.BytesIO()
             with pd.ExcelWriter(output, engine='openpyxl') as writer:
-                modified_df.to_excel(writer, index=False, sheet_name='Modified')
+                for sheet in sheet_names:
+                    if sheet == selected_sheet:
+                        modified_df.to_excel(writer, index=False, sheet_name=sheet)
+                    else:
+                        pd.read_excel(uploaded_file, sheet_name=sheet).to_excel(writer, index=False, sheet_name=sheet)
             output.seek(0)
             
             st.success("File exported successfully. You can download it below.")
             st.download_button(label="Download modified Excel file", data=output, file_name="modified_file.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             
+            st.write("Preview of the modified sheet:")
             st.dataframe(modified_df)
