@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import io
 
-st.title('Visualizzatore e Modificatore di File Excel')
+st.title('Duplicatore Dope righe Excel')
 
 # Controlla se un nuovo file è caricato
 if 'uploaded_file' not in st.session_state:
