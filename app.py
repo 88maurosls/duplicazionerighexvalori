@@ -19,7 +19,7 @@ if uploaded_file is not None:
         st.session_state.header_row = 0
     
     # Input per la riga di intestazione
-    header_row = st.number_input("Inserisci il numero della riga di intestazione (partendo da 0)", min_value=0, value=st.session_state.header_row, key="header_row_input")
+    header_row = st.number_input("Inserisci il numero della riga di intestazione", min_value=0, value=st.session_state.header_row, key="header_row_input")
     st.session_state.header_row = header_row
     
     # Carica il file Excel
@@ -69,7 +69,7 @@ if uploaded_file is not None:
                         pd.read_excel(uploaded_file, sheet_name=sheet, dtype=str).to_excel(writer, index=False, sheet_name=sheet)
             output.seek(0)
             
-            st.success("File esportato con successo. Puoi scaricarlo qui sotto.")
+            st.success("File modificato con successo. Puoi scaricarlo qui sotto.")
             st.download_button(label="Scarica il file Excel modificato", data=output, file_name="file_modificato.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             
             st.write("Anteprima del foglio modificato:")
