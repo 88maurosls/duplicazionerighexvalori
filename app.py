@@ -28,8 +28,8 @@ if uploaded_file is not None:
         
         # Select columns for the operation
         columns = df.columns.tolist()
-        col1 = st.selectbox("Select the column with values to duplicate", columns)
-        col2 = st.selectbox("Select the column with number of duplications", columns)
+        col1 = st.selectbox("Select the column with values to duplicate", columns, key="col1")
+        col2 = st.selectbox("Select the column with number of duplications", columns, key="col2")
         
         if st.button("Modify and Export"):
             # Create the modified dataframe
